@@ -65,7 +65,9 @@ public class FailureOcurrenceService implements ApplicationRunner {
 				
 				if (currentFailure != null) {
 					failureDuration = currentFailure.getDuration();
+					
 					timoutConfig.enableTimeout();
+					timoutConfig.setSleepDuration(failureDuration);
 				} else {
 					continue;
 				}
@@ -73,10 +75,13 @@ public class FailureOcurrenceService implements ApplicationRunner {
 			
 			if (failureTick < failureDuration) {
 				failureTick++;
+				timoutConfig.setSleepDuration(failureDuration - failureTick);
 			} else {
 				failureTick = 0;
 				currentFailure = null;
+				
 				timoutConfig.disableTimeout();
+				timoutConfig.resetSleepDuration();
 			}
 		}
 	}

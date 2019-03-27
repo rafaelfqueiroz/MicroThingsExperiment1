@@ -29,20 +29,20 @@ public class IoTDeviceController {
 	
 	@GetMapping
 	public ResponseEntity<Double> getDeviceData() throws InterruptedException {
-		logger.info("Receiving request for device data.");
+		logger.debug(new StringBuilder("STARTING ").append(getClass().getEnclosingMethod().getName()).toString());
 		try {
 			if (timeoutConfig.isTimeoutEnabled()) {
-				Thread.sleep(sleepTime);
-			} 
+				Thread.sleep(timeoutConfig.getSleepDuration());
+			}
 			
 			Double response = dataReader.getNextValue();
 			
-			logger.info("Returning the device data: ", response);
+			logger.debug(new StringBuilder("RETURNING: ").append(response).toString());
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 			
-			logger.info("FAILURE OCURRENCE", e);
+			logger.debug("FAILURE ", e);
 			throw e;
 		}
 	}
