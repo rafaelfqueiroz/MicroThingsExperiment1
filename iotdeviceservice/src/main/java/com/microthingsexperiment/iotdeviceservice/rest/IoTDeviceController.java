@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +28,7 @@ public class IoTDeviceController {
 	public Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@GetMapping
-	public Double getDeviceData() throws InterruptedException {
+	public ResponseEntity<Double> getDeviceData() throws InterruptedException {
 		logger.info("Receiving request for device data.");
 		try {
 			if (timeoutConfig.isTimeoutEnabled()) {
@@ -36,7 +38,7 @@ public class IoTDeviceController {
 			Double response = dataReader.getNextValue();
 			
 			logger.info("Returning the device data: ", response);
-			return response;
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 			
