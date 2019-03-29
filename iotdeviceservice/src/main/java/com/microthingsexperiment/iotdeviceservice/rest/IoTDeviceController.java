@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.microthingsexperiment.iotdeviceservice.Setup;
 import com.microthingsexperiment.iotdeviceservice.datareader.DataReader;
 import com.microthingsexperiment.iotdeviceservice.failure.TimeoutConfig;
 
@@ -20,6 +21,8 @@ public class IoTDeviceController {
 	@Autowired
 	private TimeoutConfig timeoutConfig;
 	@Autowired
+	private Setup setup;
+	@Autowired
 	private DataReader dataReader;
 	
 	@Value("${timeout.sleepTime}")
@@ -29,7 +32,9 @@ public class IoTDeviceController {
 	
 	@GetMapping
 	public ResponseEntity<Double> getDeviceData() throws InterruptedException {
-		logger.debug(new StringBuilder("STARTING ").append(getClass().getEnclosingMethod().getName()).toString());
+		logger.debug(new StringBuilder("STARTING ").append(new Throwable() 
+                .getStackTrace()[0] 
+                .getMethodName()).toString());
 		try {
 			if (timeoutConfig.isTimeoutEnabled()) {
 				Thread.sleep(timeoutConfig.getSleepDuration());
@@ -45,6 +50,12 @@ public class IoTDeviceController {
 			logger.debug("FAILURE ", e);
 			throw e;
 		}
+	}
+	
+	@GetMapping
+	public ResponseEntity<String> setup() {
+		setup.activate();
+		return new ResponseEntity<>("SETUP OK", HttpStatus.OK);
 	}
 
 }

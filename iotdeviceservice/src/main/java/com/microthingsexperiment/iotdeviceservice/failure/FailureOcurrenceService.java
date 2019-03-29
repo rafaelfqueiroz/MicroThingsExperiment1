@@ -15,12 +15,15 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import com.microthingsexperiment.iotdeviceservice.Setup;
+
 @Component
 public class FailureOcurrenceService implements ApplicationRunner {
 	
 	@Autowired
 	private TimeoutConfig timoutConfig;
-
+	@Autowired
+	private Setup setup;
 	@Value("${failure.file.path}")
 	private String failureFilePath;
 	
@@ -57,6 +60,10 @@ public class FailureOcurrenceService implements ApplicationRunner {
 		FailureOcurrence currentFailure = null;
 		
 		while (true) {
+			if (!setup.isActive()) {
+				Thread.sleep(MILLI);
+				continue;
+			}
 			Thread.sleep(MILLI);
 			tick++;
 			
