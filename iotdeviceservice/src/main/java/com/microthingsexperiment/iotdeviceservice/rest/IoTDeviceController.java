@@ -52,7 +52,7 @@ public class IoTDeviceController {
 		}
 	}
 	
-	@GetMapping
+	@GetMapping("/setup")
 	public ResponseEntity<String> setup() {
 		setup.activate();
 		return new ResponseEntity<>("SETUP OK", HttpStatus.OK);
