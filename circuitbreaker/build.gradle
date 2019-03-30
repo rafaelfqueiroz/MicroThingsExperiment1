@@ -1,12 +1,23 @@
-plugins {
-	id 'org.springframework.boot'
-	id 'java'
+buildscript {
+	ext { springBootVersion = '2.1.3.RELEASE' }
+    repositories { mavenCentral() }
 }
 
-apply plugin: 'io.spring.dependency-management'
+plugins { id "io.spring.dependency-management" }
+
+ext { 
+	springBootVersion = '2.1.3.RELEASE' 
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+jar {
+	baseName = 'circuitbreaker'
+	version = '0.0.1-SNAPSHOT'
+}
 
 group = 'com.microthingsexperiment'
-version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 repositories {
@@ -18,6 +29,7 @@ ext {
 }
 
 dependencies {
+	compile('org.springframework.boot:spring-boot-starter')
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'
 	implementation('org.springframework.boot:spring-boot-starter-web')
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -25,6 +37,7 @@ dependencies {
 
 dependencyManagement {
 	imports {
+		mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
 	}
 }
