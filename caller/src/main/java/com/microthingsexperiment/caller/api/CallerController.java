@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.microthingsexperiment.caller.Setup;
 import com.microthingsexperiment.caller.service.DeviceComputationService;
 
 @Controller
@@ -17,13 +18,17 @@ public class CallerController {
 	
 	@Autowired
 	private DeviceComputationService service;  
+	@Autowired
+	private Setup setup;
 	
 	public Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@GetMapping
 	public ResponseEntity<Double> call() {
 		try {
-			logger.debug(new StringBuilder("STARTING ").append(getClass().getEnclosingMethod().getName()).toString());
+			logger.debug(new StringBuilder("STARTING ").append(new Throwable() 
+	                .getStackTrace()[0] 
+	                .getMethodName()).toString());
 			
 			Double computedValue = service.compute();
 			
@@ -36,6 +41,12 @@ public class CallerController {
 			throw e;
 		}
 		
+	}
+	
+	@GetMapping("/setup")
+	public ResponseEntity<String> setup() {
+		setup.activate();
+		return new ResponseEntity<>("SETUP OK", HttpStatus.OK);
 	}
 
 }
