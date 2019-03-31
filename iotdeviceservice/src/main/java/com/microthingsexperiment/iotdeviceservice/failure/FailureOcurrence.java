@@ -2,25 +2,25 @@ package com.microthingsexperiment.iotdeviceservice.failure;
 
 public class FailureOcurrence {
 
-	private Integer moment;
-	private Integer duration;
+	private Long start;
+	private Long duration;
 	
-	public FailureOcurrence(Integer moment, Integer duration) {
-		this.moment = moment;
+	public FailureOcurrence(Long start, Long duration) {
+		this.start = start;
 		this.duration = duration;
 	}
 	
-	public Integer getMoment() {
-		return moment;
+	public Long getStart() {
+		return start;
 	}
-	public void setMoment(Integer moment) {
-		this.moment = moment;
+	
+	public Long getEnd() {
+		
+		return start+duration;
 	}
-	public Integer getDuration() {
+	public Long getDuration() {
 		return duration;
 	}
-	public void setDuration(Integer duration) {
-		this.duration = duration;
-	}
+	
 	
 }
