@@ -1,0 +1,11 @@
+Starting CallerApplication on MacBook-Rafael.local with PID 32322 (/Users/rafaelfdequeiroz/workspace-dev/MicroThingsExperiment1/caller/bin/main started by rafaelfdequeiroz in /Users/rafaelfdequeiroz/workspace-dev/MicroThingsExperiment1/caller)
+Running with Spring Boot v2.1.3.RELEASE, Spring v5.1.5.RELEASE
+The following profiles are active: average,gatewayRequest
+Started CallerApplication in 4.459 seconds (JVM running for 5.218)
+The following profiles are active: average,gatewayRequest
+The following profiles are active: average,gatewayRequest
+Started CallerApplication in 4.418 seconds (JVM running for 5.227)
+The following profiles are active: average,gatewayRequest
+Started CallerApplication in 4.555 seconds (JVM running for 5.302)
+The following profiles are active: average,gatewayRequest
+The following profiles are active: average,gatewayRequest
