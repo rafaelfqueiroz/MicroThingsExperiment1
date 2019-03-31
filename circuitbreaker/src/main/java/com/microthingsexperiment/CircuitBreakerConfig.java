@@ -15,7 +15,8 @@ public class CircuitBreakerConfig {
 	private long timeout;
 	
 	@Bean
-	public RestTemplate restTemplate(RestTemplateBuilder builder) {
+	public RestTemplate restTemplate() {
+		RestTemplateBuilder builder = new RestTemplateBuilder();
 		return builder.setConnectTimeout(Duration.ofMillis(timeout))
 				.setReadTimeout(Duration.ofMillis(timeout)).build();
 	}
