@@ -11,10 +11,13 @@ public class ActiveProfiles {
 	private Environment env;
 	
 	public boolean isCacheActive() {
+		return isProfileActive("cacheStrategy");
+	}
+
+	public boolean isProfileActive(String profile) {
 		String[] activeProfiles = env.getActiveProfiles();
-		
 		for (String profileName : activeProfiles) {
-			if (profileName.equals("cacheStrategy")) {
+			if (profileName.equals(profile)) {
 				return true;
 			}
 		}

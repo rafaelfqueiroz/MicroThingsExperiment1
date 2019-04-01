@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import com.microthingsexperiment.ActiveProfiles;
 import com.microthingsexperiment.caller.Setup;
 import com.microthingsexperiment.caller.service.registration.Device;
 
@@ -18,16 +19,20 @@ public class SetupService {
 	
 	@Autowired
 	private Setup setup;
+	@Autowired
+	private ActiveProfiles profiles;
 	
 	public void initializeSetup() {
 		setup.activate();
 		
-		restTemplate.getForObject(
-				new StringBuilder("http://")
-								.append(serviceRegistry.getGateway().getHost())
-								.append(":")
-								.append(serviceRegistry.getGateway().getPort())
-								.append("/gateway/setup").toString(), String.class);
+		if (profiles.isProfileActive("gatewayRequest")) {
+			restTemplate.getForObject(
+					new StringBuilder("http://")
+									.append(serviceRegistry.getGateway().getHost())
+									.append(":")
+									.append(serviceRegistry.getGateway().getPort())
+									.append("/gateway/setup").toString(), String.class);
+		}
 		
 		
 		for (Device device : serviceRegistry.getDevices()) {
