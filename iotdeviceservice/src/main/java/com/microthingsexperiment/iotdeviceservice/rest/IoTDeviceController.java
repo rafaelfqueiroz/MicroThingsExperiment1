@@ -67,9 +67,8 @@ public class IoTDeviceController {
 	public ResponseEntity<String> setup() {
 		
 		setupManager.activate();
-		long startTime = setupManager.getStartTime();
 		
-		logger.info("IoTDevice.Setup:["+startTime+"]");
+		logger.info("IoTDevice.Setup:[]");
 		
 		return new ResponseEntity<>("SETUP OK", HttpStatus.OK);
 	}
