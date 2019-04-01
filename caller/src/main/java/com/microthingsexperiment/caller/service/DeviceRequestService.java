@@ -3,7 +3,6 @@ package com.microthingsexperiment.caller.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -14,14 +13,11 @@ public class DeviceRequestService implements RemoteRequestService {
 
 	@Autowired
 	private RestTemplate restTemplate;
-	@Value("${request.host}")
-	private String host;
-	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Double requestData(String deviceId) {
+	public Double requestData(String host, String deviceId) {
 		String baseUrl = new StringBuilder("http://")
 				.append(host)
 				.append(":")

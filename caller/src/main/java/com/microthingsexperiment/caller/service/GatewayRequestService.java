@@ -5,6 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,33 +18,35 @@ public class GatewayRequestService implements RemoteRequestService {
 
 	@Autowired
 	private RestTemplate restTemplate;
-	@Value("${request.host}")
-	private String host;
-	@Value("${request.port}")
-	private String port;
-	
+	@Value("${setup.gateway.host}")
+	private String gatewayHost;
+	@Value("${setup.gateway.port}")
+	private String gatewayPort;
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Double requestData(String deviceId) {
+	public Double requestData(String host, String port) {
 		String baseUrl = new StringBuilder("http://")
-				.append(host)
+				.append(gatewayHost)
 				.append(":")
-				.append(port)
-				.append("/gateway/")
-				.append(deviceId).toString();
+				.append(gatewayPort)
+				.append("/gateway").toString();
 		
 		try {	
-			
 			logger.info("Request Started: "+baseUrl);
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("device-host", host);
+			headers.add("device-port", port);
+			HttpEntity<HttpHeaders> httpEntity = new HttpEntity<>(headers);
 
-			Double temperature = restTemplate.getForObject(baseUrl, Double.class);
+			ResponseEntity<Double> response = restTemplate.exchange(baseUrl, HttpMethod.GET, httpEntity, Double.class);
+			Double data = response.getBody();
 			
 			logger.info("Request Returned: "+baseUrl);
 			
-			return temperature;
+			return data;
 		} catch (Exception ex) {
 			logger.info("Failure Requesting: "+baseUrl);
 			logger.error("Failure Requesting: "+baseUrl,ex);

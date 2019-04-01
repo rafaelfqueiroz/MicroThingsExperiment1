@@ -3,11 +3,10 @@ package com.microthingsexperiment.iotgateway.api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,23 +24,21 @@ public class IoTGatewayController {
 	@Autowired
 	private Setup setup;
 	
-	@Value("${host}")
-	private String host;
 	@Autowired
 	private ActiveProfiles profiles;
 	
 	public Logger logger = LoggerFactory.getLogger(getClass());
 	
-	@GetMapping("/{deviceId}")
-	public Double getDeviceValue(@PathVariable("deviceId") String deviceId) {
+	@GetMapping
+	public Double getDeviceValue(@RequestHeader("device-host") String deviceHost, @RequestHeader("device-port") String devicePort) {
+		String deviceId = devicePort;
 		logger.info("Starting:"+"Gateway.getDeviceValue("+deviceId+")");
-
 		try {
 			Double response = null;
 			if (profiles.isCacheActive()) {
-				response = cbService.executeGetRequest("http://"+ host + ":"+ deviceId +"/device", Double.class, deviceId);
+				response = cbService.executeGetRequest("http://"+ deviceHost + ":"+ devicePort +"/device", Double.class, deviceId);
 			} else {
-				response = cbService.executeGetRequest("http://"+ host + ":"+ deviceId +"/device", Double.class);
+				response = cbService.executeGetRequest("http://"+ deviceHost + ":"+ devicePort +"/device", Double.class);
 			}
 			
 			logger.info("Returning:"+"Gateway.getDeviceValue("+deviceId+"):"+response);
