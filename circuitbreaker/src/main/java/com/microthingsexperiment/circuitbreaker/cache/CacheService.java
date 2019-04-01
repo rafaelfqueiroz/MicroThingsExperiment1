@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("cacheStrategy")
+@Profile({"EnableCircuitBreaker", "cacheStrategy"})
 public class CacheService {
 	
 	@Value("${cache.expirationTime}")

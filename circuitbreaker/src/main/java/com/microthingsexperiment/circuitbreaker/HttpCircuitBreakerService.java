@@ -3,6 +3,7 @@ package com.microthingsexperiment.circuitbreaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -10,6 +11,7 @@ import com.microthingsexperiment.circuitbreaker.fallback.AbstractFallbackStrateg
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 @Component
+@Profile("EnableCircuitBreaker")
 public class HttpCircuitBreakerService implements CircuitBreakerService {
 
 	@Autowired
