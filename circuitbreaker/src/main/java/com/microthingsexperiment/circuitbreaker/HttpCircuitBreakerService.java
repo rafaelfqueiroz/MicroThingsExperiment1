@@ -1,5 +1,7 @@
 package com.microthingsexperiment.circuitbreaker;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -15,10 +17,18 @@ public class HttpCircuitBreakerService implements CircuitBreakerService {
 	@Autowired
 	private AbstractFallbackStrategy fallback;
 	
+	public Logger logger = LoggerFactory.getLogger(getClass());
+
+	
 	@HystrixCommand(fallbackMethod="responseFallback")
 	public <T> T executeGetRequest(String url, Class<T> responseType, String cacheKey) {
+		logger.info("Starting:"+"CB.executeGetRequest()");
+		
 		T response = restTemplate.getForObject(url, responseType);
 		fallback.updateDefaultValue(cacheKey, response);
+		
+		logger.info("Returning:"+"CB.executeGetRequest():"+response);
+		
 		return response;
 	}
 	
@@ -28,8 +38,12 @@ public class HttpCircuitBreakerService implements CircuitBreakerService {
 	}
 	
 	public <T> T responseFallback(String url, Class<T> responseType, String cacheKey) throws Exception {
-		T cachedTemperature = fallback.getDefaultFallback(cacheKey, responseType);
-		return cachedTemperature;
+		logger.info("Executing Fallback ["+fallback.getClass().getName()+"]");
+		
+		T cachedResult = fallback.getDefaultFallback(cacheKey, responseType);
+		
+
+		return cachedResult;
 	}
 	
 	
