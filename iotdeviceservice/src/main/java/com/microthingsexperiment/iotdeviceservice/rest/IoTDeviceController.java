@@ -21,7 +21,7 @@ public class IoTDeviceController {
 	@Autowired
 	private FailureManager failureManager;
 	@Autowired
-	private Setup setup;
+	private Setup setupManager;
 	@Autowired
 	private DataReader dataReader;
 	
@@ -32,40 +32,47 @@ public class IoTDeviceController {
 	
 	@GetMapping
 	public ResponseEntity<Double> getDeviceData() throws InterruptedException {
-		logger.debug(new StringBuilder("STARTING ").append(new Throwable() 
-                .getStackTrace()[0] 
-                .getMethodName()).toString());
+		
+		logger.info("Starting:"+"getDeviceData()");
+		
+		ResponseEntity<Double> response;
+		
+		
 		try {
 			if (failureManager.isFailed()) {
 				synchronized(this) {
-				  logger.debug("OMISSION FAILURE ["+ setup.getExecutionTime() + " ms]");
+				  logger.info("Omission:IoTDevice.getDeviceData()[ExecutionTime(ms)="+ setupManager.getExecutionTime() + "]");
 				   wait(omissionLockDuration);
 				}
+				response = new ResponseEntity<Double>(HttpStatus.SERVICE_UNAVAILABLE);
+			}
+			else {
+				Double reading = dataReader.getNextValue();
+				
+				logger.info("Returning:"+"IoTDevice.getDeviceData():"+reading);
+				
+				response = new ResponseEntity<Double>(reading, HttpStatus.OK);	
 			}
 			
-			Double response = dataReader.getNextValue();
+			return response;
 			
-			logger.debug(new StringBuilder("RETURNING: ").append(response).toString());
-			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (Exception e) {
-			logger.debug("FAILURE ", e);
-			logger.error("Failure to getDeviceData",e);
+			logger.info("Failure:"+"IoTDevice.getDeviceData()");
+			logger.error("Failure to IoTDevice.getDeviceData",e);
 			throw e;
 		}
 	}
 	
 	@GetMapping("/setup")
 	public ResponseEntity<String> setup() {
-		setup.activate();
-		logger.debug("SETUP ");
+		
+		setupManager.activate();
+		long startTime = setupManager.getStartTime();
+		
+		logger.info("IoTDevice.Setup:["+startTime+"]");
+		
 		return new ResponseEntity<>("SETUP OK", HttpStatus.OK);
 	}
-	
-	@GetMapping("/reset")
-	public ResponseEntity<String> reset() {
-		setup.deactivate();
-		logger.debug("RESET ");
-		return new ResponseEntity<>("RESET OK", HttpStatus.OK);
-	}
+
 
 }

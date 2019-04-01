@@ -10,15 +10,16 @@ public class Setup {
 	private boolean active = false;
 	private long startTime;
 	
+	public long getStartTime() {
+		return startTime;
+	}
+
+
 	public void activate() {
 		this.active = true;
 		this.startTime = (new Date()).getTime();
 	}
 	
-	public void deactivate() {
-		this.active = true;
-		this.startTime = 0;
-	}
 
 	public boolean isActive() {
 		return active;
