@@ -31,17 +31,18 @@ public class IoTGatewayController {
 	
 	@GetMapping("/{deviceId}")
 	public Double getDeviceValue(@PathVariable("deviceId") String deviceId) {
-		logger.debug(new StringBuilder("STARTING ").append(new Throwable() 
-                .getStackTrace()[0] 
-                .getMethodName()).toString());
+		logger.info("Starting:"+"Gateway.getDeviceValue("+deviceId+")");
+
 		try {
 			
 			Double response = cbService.executeGetRequest("http://"+ host + ":"+ deviceId +"/device", Double.class);
 			
-			logger.debug(new StringBuilder("RETURNING: ").append(response).toString());
+			logger.info("Returning:"+"Gateway.getDeviceValue("+deviceId+"):"+response);
+			
 			return response;
 		} catch (Exception e){
-			logger.debug("FAILURE ", e);
+			logger.info("Failure:"+"Gateway.getDeviceValue("+deviceId+")");
+			logger.error("Failure to Gateway.getDeviceValue("+deviceId+")",e);
 			throw e;
 		}
 		
@@ -50,6 +51,10 @@ public class IoTGatewayController {
 	@GetMapping("/setup")
 	public ResponseEntity<String> setup() {
 		setup.activate();
+		
+		
+		logger.info("Gateway.Setup:[]");
+		
 		return new ResponseEntity<>("SETUP OK", HttpStatus.OK);
 	}
 
