@@ -31,7 +31,7 @@ public class IoTDeviceController {
 	public Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@GetMapping
-	public ResponseEntity<Double> getDeviceData() throws InterruptedException {
+	public ResponseEntity<Double> getDeviceData() {
 		
 		logger.info("Starting:"+"getDeviceData()");
 		
@@ -54,13 +54,15 @@ public class IoTDeviceController {
 				response = new ResponseEntity<Double>(reading, HttpStatus.OK);	
 			}
 			
-			return response;
 			
 		} catch (Exception e) {
 			logger.info("Failure:"+"IoTDevice.getDeviceData()");
 			logger.error("Failure to IoTDevice.getDeviceData",e);
-			throw e;
+			
+			response = new ResponseEntity<Double>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		
+		return response;
 	}
 	
 	@GetMapping("/setup")
