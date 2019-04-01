@@ -16,7 +16,11 @@ public class FallbackCacheStrategy extends AbstractFallbackStrategy {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getDefaultFallback(String deviceId, Class<T> clazz) throws Exception {
-		T cachedValue = (T) service.getValue(deviceId);
+		Object value = service.getValue(deviceId);
+		if (value == null) {
+			throw new RuntimeException("No value in cache.");
+		}
+		T cachedValue = (T) value;
 		return cachedValue;
 	}
 }

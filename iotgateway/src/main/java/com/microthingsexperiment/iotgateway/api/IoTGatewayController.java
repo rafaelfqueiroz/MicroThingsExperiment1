@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.microthingsexperiment.ActiveProfiles;
 import com.microthingsexperiment.circuitbreaker.CircuitBreakerService;
 import com.microthingsexperiment.iotgateway.Setup;
 
@@ -26,6 +27,8 @@ public class IoTGatewayController {
 	
 	@Value("${host}")
 	private String host;
+	@Autowired
+	private ActiveProfiles profiles;
 	
 	public Logger logger = LoggerFactory.getLogger(getClass());
 	
@@ -34,8 +37,12 @@ public class IoTGatewayController {
 		logger.info("Starting:"+"Gateway.getDeviceValue("+deviceId+")");
 
 		try {
-			
-			Double response = cbService.executeGetRequest("http://"+ host + ":"+ deviceId +"/device", Double.class);
+			Double response = null;
+			if (profiles.isCacheActive()) {
+				response = cbService.executeGetRequest("http://"+ host + ":"+ deviceId +"/device", Double.class, deviceId);
+			} else {
+				response = cbService.executeGetRequest("http://"+ host + ":"+ deviceId +"/device", Double.class);
+			}
 			
 			logger.info("Returning:"+"Gateway.getDeviceValue("+deviceId+"):"+response);
 			
