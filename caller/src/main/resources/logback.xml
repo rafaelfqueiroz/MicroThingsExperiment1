@@ -4,27 +4,28 @@
 	<include
 		resource="org/springframework/boot/logging/logback/base.xml" />
 		
-	<logger name="org.springframework.web" level="DEBUG" />
+	<logger name="org.springframework.web" level="OFF" />
 		
-	<appender name="ERRO"
+	<appender name="apppender-experiment"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>caller-%d{yyyy-MM-dd}.log
+			<fileNamePattern>caller-experiment-data-%d{yyyy-MM-dd}.log
 			</fileNamePattern>
 		</rollingPolicy>
 		<encoder>
-			<pattern>%msg%n</pattern>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
 		</encoder>
 	</appender>
+	
 	<appender name="CONSOLE"
 		class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
 			<pattern>%msg%n</pattern>
 		</encoder>
 	</appender>
-	<logger name="com.microthingsexperiment" level="DEBUG">
-		<appender-ref ref="ERRO" />
-		<appender-ref ref="CONSOLE" />
+	
+	<logger name="com.microthingsexperiment" level="INFO" additivity="true">
+		<appender-ref ref="apppender-experiment" />
 	</logger>
 </configuration>

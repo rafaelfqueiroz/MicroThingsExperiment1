@@ -27,18 +27,19 @@ public class CallerController {
 	@GetMapping
 	public ResponseEntity<Double> call() {
 		try {
-			logger.debug(new StringBuilder("STARTING ").append(new Throwable() 
-	                .getStackTrace()[0] 
-	                .getMethodName()).toString());
+			logger.info("Starting:"+"Caller.call()");
+
 			
 			Double computedValue = service.compute();
 			
-			logger.debug(new StringBuilder("RETURNING: ").append(computedValue).toString());
-			return new ResponseEntity<>(computedValue, HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
+			logger.info("Returning:"+"Caller.call():"+computedValue);
 			
-			logger.debug("FAILURE ", e);
+			
+			return new ResponseEntity<>(computedValue, HttpStatus.OK);
+			
+		} catch (Exception e) {
+			logger.info("Failure:"+"Caller.call()");
+			logger.error("Failure to Caller.call()",e);
 			throw e;
 		}
 		
@@ -48,6 +49,9 @@ public class CallerController {
 	@GetMapping("/setup")
 	public ResponseEntity<String> setup() {
 		setupService.initializeSetup();
+		
+		logger.info("Caller.Setup:[]");
+		
 		return new ResponseEntity<>("SETUP OK", HttpStatus.OK);
 	}
 
