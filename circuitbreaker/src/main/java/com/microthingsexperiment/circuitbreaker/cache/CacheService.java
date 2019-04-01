@@ -20,6 +20,10 @@ public class CacheService {
 	private Map<String, CacheWrapper> cache = new HashMap<>();
 	
 	public Object getValue(String key) {
+		CacheWrapper cacheWrapper = cache.get(key);
+		if (cacheWrapper == null) {
+			return null;
+		}
 		return cache.get(key).getValue();
 	}
 	
