@@ -19,6 +19,9 @@ public class DeviceRequestService implements RemoteRequestService {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Double requestData(String host, String deviceId) {
+		
+		Double result =Double.NaN;
+		
 		String baseUrl = new StringBuilder("http://")
 				.append(host)
 				.append(":")
@@ -27,15 +30,15 @@ public class DeviceRequestService implements RemoteRequestService {
 		try {
 			logger.info("Request Started: "+baseUrl);
 			
-			Double result = restTemplate.getForObject(baseUrl, Double.class);
+			result = restTemplate.getForObject(baseUrl, Double.class);
 			
 			logger.info("Request Returned: "+baseUrl);
-			return result;
+
 		} catch (Exception ex) {
 			logger.info("Failure Requesting: "+baseUrl);
-			logger.error("Failure Requesting: "+baseUrl,ex);
 			throw ex;
 		}
+		return result;
 	}
 
 }

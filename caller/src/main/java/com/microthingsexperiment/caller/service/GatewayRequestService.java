@@ -28,29 +28,39 @@ public class GatewayRequestService implements RemoteRequestService {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Double requestData(String host, String port) {
+		
 		String baseUrl = new StringBuilder("http://")
 				.append(gatewayHost)
 				.append(":")
 				.append(gatewayPort)
 				.append("/gateway").toString();
 		
+		Double result =null;
+
 		try {	
-			logger.info("Request Started: "+baseUrl);
+			
+			
 			HttpHeaders headers = new HttpHeaders();
+			
 			headers.add("device-host", host);
 			headers.add("device-port", port);
+			
 			HttpEntity<HttpHeaders> httpEntity = new HttpEntity<>(headers);
+			
+			logger.info("Request Started: "+baseUrl);
 
 			ResponseEntity<Double> response = restTemplate.exchange(baseUrl, HttpMethod.GET, httpEntity, Double.class);
-			Double data = response.getBody();
+			
+			result = response.getBody();
 			
 			logger.info("Request Returned: "+baseUrl);
 			
-			return data;
 		} catch (Exception ex) {
 			logger.info("Failure Requesting: "+baseUrl);
-			logger.error("Failure Requesting: "+baseUrl,ex);
 			throw ex;
+
 		}
+		
+		return result;
 	}
 }

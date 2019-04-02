@@ -24,6 +24,7 @@ public class DeviceComputationService implements DeviceComputation {
 	public Double compute() {
 		
 		List<Double> temperatures = new ArrayList<>();
+		
 		for (Device device : serviceRegistry.getDevices()) {
 			temperatures.add(
 						remoteService.requestData(device.getHost(), device.getPort())
