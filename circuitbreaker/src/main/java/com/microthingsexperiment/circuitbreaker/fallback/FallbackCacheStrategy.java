@@ -18,6 +18,11 @@ public class FallbackCacheStrategy extends AbstractFallbackStrategy {
 	public Logger logger = LoggerFactory.getLogger(getClass());
 
 	
+	@Override
+	public void updateDefaultValue(String deviceId, Object value) {
+		service.put(deviceId, value);
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getDefaultFallback(String deviceId, Class<T> clazz) throws Exception {

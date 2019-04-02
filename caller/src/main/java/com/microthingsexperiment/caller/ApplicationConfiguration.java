@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class ApplicationConfiguration {
 
-	@Value("${timeout}")
+	@Value("${request.timeout}")
 	private long timeout;
 	
 	@Bean
