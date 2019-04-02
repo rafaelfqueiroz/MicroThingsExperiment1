@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -24,10 +26,15 @@ public class FailureManager {
 	private Setup setup;
 
 	private List<FailureOcurrence> failures = new ArrayList<FailureOcurrence>();
+	
+	public Logger logger = LoggerFactory.getLogger(getClass());
+
 
 	@PostConstruct
 	private void loadFailureFile() {
 		try {
+			logger.info("Starting the load of failures definition from file");
+
 			List<String> lines = Files.readAllLines(Paths.get(failureFilePath));
 			for (String line : lines) {
 				String[] lineValues = line.split(";");
@@ -37,10 +44,13 @@ public class FailureManager {
 					Integer failureDuration = Integer.valueOf(split[1]);
 					failures.add(new FailureOcurrence(failureMoment*1000l, failureDuration*1000l));
 				}
+				
+			logger.info("Failures definition loaded");
+
 
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.info("Error trying to load failures definition file ("+failureFilePath+"). Considering no device failures!");
 		}
 	}
 
