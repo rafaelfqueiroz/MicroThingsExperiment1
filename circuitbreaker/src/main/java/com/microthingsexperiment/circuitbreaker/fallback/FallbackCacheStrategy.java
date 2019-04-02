@@ -1,5 +1,7 @@
 package com.microthingsexperiment.circuitbreaker.fallback;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -13,14 +15,22 @@ public class FallbackCacheStrategy extends AbstractFallbackStrategy {
 	@Autowired
 	private CacheService service;
 	
+	public Logger logger = LoggerFactory.getLogger(getClass());
+
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getDefaultFallback(String deviceId, Class<T> clazz) throws Exception {
+		
 		Object value = service.getValue(deviceId);
+		
 		if (value == null) {
-			throw new RuntimeException("No value in cache.");
+			logger.info("No value found in the cache ["+deviceId+"]. Aborting fallback.");
+
+			throw new RuntimeException("No value in the cache.");
 		}
-		T cachedValue = (T) value;
-		return cachedValue;
+		
+		
+		return ((T) value);
 	}
 }
