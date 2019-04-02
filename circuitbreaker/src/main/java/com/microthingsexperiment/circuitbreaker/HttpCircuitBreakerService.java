@@ -24,12 +24,14 @@ public class HttpCircuitBreakerService implements CircuitBreakerService {
 	
 	@HystrixCommand(fallbackMethod="responseFallback")
 	public <T> T executeGetRequest(String url, Class<T> responseType, String cacheKey) {
-		logger.info("Starting:"+"CB.executeGetRequest()");
+		
+		logger.info("Starting:"+"CB.executeGetRequest("+url+")");
 		
 		T response = restTemplate.getForObject(url, responseType);
+		
 		fallback.updateDefaultValue(cacheKey, response);
 		
-		logger.info("Returning:"+"CB.executeGetRequest():"+response);
+		logger.info("Returning:"+"CB.executeGetRequest("+url+"):"+response);
 		
 		return response;
 	}
@@ -44,6 +46,9 @@ public class HttpCircuitBreakerService implements CircuitBreakerService {
 		
 		T cachedResult = fallback.getDefaultFallback(cacheKey, responseType);
 		
+		
+		logger.info("Fallback cached result  ["+cachedResult+"]");
+
 
 		return cachedResult;
 	}
