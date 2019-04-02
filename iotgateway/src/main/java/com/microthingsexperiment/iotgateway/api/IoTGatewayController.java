@@ -31,8 +31,10 @@ public class IoTGatewayController {
 	
 	@GetMapping
 	public Double getDeviceValue(@RequestHeader("device-host") String deviceHost, @RequestHeader("device-port") String devicePort) {
-		String deviceId = devicePort;
+		String deviceId = deviceHost+":"+devicePort;
+		
 		logger.info("Starting:"+"Gateway.getDeviceValue("+deviceId+")");
+		
 		try {
 			Double response = null;
 			if (profiles.isCacheActive()) {
