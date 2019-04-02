@@ -13,6 +13,11 @@ public class FallbackCacheStrategy extends AbstractFallbackStrategy {
 	@Autowired
 	private CacheService service;
 	
+	@Override
+	public void updateDefaultValue(String deviceId, Object value) {
+		service.put(deviceId, value);
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getDefaultFallback(String deviceId, Class<T> clazz) throws Exception {

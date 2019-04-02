@@ -1,6 +1,8 @@
 package com.microthingsexperiment.circuitbreaker.cache;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -17,7 +19,12 @@ public class CacheService {
 	@Value("${cache.expirationTime}")
 	private Long expirationTime;
 
-	private Map<String, CacheWrapper> cache = new HashMap<>();
+	private Map<String, CacheWrapper> cache;
+	
+	public CacheService() {
+		Map<String, CacheWrapper> poorCache = new HashMap<>();
+		cache =Collections.synchronizedMap(poorCache);
+	}
 	
 	public Object getValue(String key) {
 		CacheWrapper cacheWrapper = cache.get(key);
@@ -34,14 +41,17 @@ public class CacheService {
 	@Scheduled(initialDelay = 1000, fixedRate = 1000)
 	public void clearCache() {
 		Set<Entry<String, CacheWrapper>> entrySet = cache.entrySet();
-		
-		for (Entry<String, CacheWrapper> entry : entrySet) {
-			entry.getValue().decreaseTime();
+		Iterator<Entry<String, CacheWrapper>> cacheIterator = entrySet.iterator();
+		while (cacheIterator.hasNext()) {
+			Entry<String, CacheWrapper> entry = cacheIterator.next();
+			CacheWrapper currentWrapper = entry.getValue();
 			
-			if (entry.getValue().getTime() == 0) {
-				cache.remove(entry.getKey());
+			currentWrapper.decreaseTime();
+			if (currentWrapper.getTime() == 0) {
+				cacheIterator.remove();
 			}
 		}
+		
 	}
 	
 }

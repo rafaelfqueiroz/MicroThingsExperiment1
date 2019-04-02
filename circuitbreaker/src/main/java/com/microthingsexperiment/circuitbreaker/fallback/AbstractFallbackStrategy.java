@@ -6,8 +6,7 @@ public abstract class AbstractFallbackStrategy {
 		return null;
 	}
 	
-	public <T> T updateDefaultValue(String deviceId, T value) {
-		return value;
+	public void updateDefaultValue(String deviceId, Object value) {
 	}
 	
 }
