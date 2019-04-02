@@ -48,9 +48,11 @@ public class CallerController {
 	
 	@GetMapping("/setup")
 	public ResponseEntity<String> setup() {
+		
+		logger.info("Starting Caller.Setup:[]");
 		setupService.initializeSetup();
 		
-		logger.info("Caller.Setup:[]");
+		logger.info("Finishing Caller.Setup:[]");
 		
 		return new ResponseEntity<>("SETUP OK", HttpStatus.OK);
 	}

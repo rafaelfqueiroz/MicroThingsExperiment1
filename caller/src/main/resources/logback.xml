@@ -10,7 +10,7 @@
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>caller-experiment-data-%d{yyyy-MM-dd}.log
+			<fileNamePattern>../logs/caller-experiment-data-%d{yyyy-MM-dd}.log
 			</fileNamePattern>
 		</rollingPolicy>
 		<encoder>
