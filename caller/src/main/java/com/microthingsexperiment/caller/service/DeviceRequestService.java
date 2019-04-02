@@ -13,6 +13,7 @@ public class DeviceRequestService implements RemoteRequestService {
 
 	@Autowired
 	private RestTemplate restTemplate;
+	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@SuppressWarnings("unchecked")

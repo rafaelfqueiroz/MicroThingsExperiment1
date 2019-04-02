@@ -68,9 +68,14 @@ public class IoTDeviceController {
 	@GetMapping("/setup")
 	public ResponseEntity<String> setup() {
 		
-		setupManager.activate();
+		logger.info("Starting IoTDevice.Setup:[]");
 		
-		logger.info("IoTDevice.Setup:[]");
+		setupManager.activate();		
+		failureManager.isFailed();
+		dataReader.setup();
+		
+		logger.info("Finishing IoTDevice.Setup:[]");
+		
 		
 		return new ResponseEntity<>("SETUP OK", HttpStatus.OK);
 	}

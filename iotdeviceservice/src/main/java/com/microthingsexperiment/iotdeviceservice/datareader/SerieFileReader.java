@@ -37,6 +37,11 @@ public class SerieFileReader implements DataReader {
 		}
 	}
 	
+	public void setup() {
+		//Método dummy apenas para ser chamado e garantir que houve a inicialização adequada do bean
+		
+	}
+	
 	@Override
 	public Double getNextValue() {
 		Double currentValue = serie.get(index);
