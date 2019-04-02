@@ -26,6 +26,9 @@ public class CallerController {
 	
 	@GetMapping
 	public ResponseEntity<Double> call() {
+		
+		ResponseEntity<Double> response;
+		
 		try {
 			logger.info("Starting:"+"Caller.call()");
 
@@ -35,13 +38,17 @@ public class CallerController {
 			logger.info("Returning:"+"Caller.call():"+computedValue);
 			
 			
-			return new ResponseEntity<>(computedValue, HttpStatus.OK);
+			response = new ResponseEntity<>(computedValue, HttpStatus.OK);
 			
 		} catch (Exception e) {
+			
 			logger.info("Failure:"+"Caller.call()");
 			logger.error("Failure to Caller.call()",e);
-			throw e;
+			
+			response = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		
+		return response;
 		
 	}
 	
