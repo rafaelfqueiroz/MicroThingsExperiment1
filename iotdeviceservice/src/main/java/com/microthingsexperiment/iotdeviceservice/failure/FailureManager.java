@@ -28,9 +28,22 @@ public class FailureManager {
 	private List<FailureOcurrence> failures = new ArrayList<FailureOcurrence>();
 	
 	public Logger logger = LoggerFactory.getLogger(getClass());
+	
+
+	@Value("${failure.enabled:false}")
+	private boolean failureEnabled;
 
 
 	@PostConstruct
+	private void start() {
+		
+		if(failureEnabled) {
+			loadFailureFile();
+		}
+	}
+	
+	
+	
 	private void loadFailureFile() {
 		try {
 			logger.info("Starting the load of failures definition from file");
