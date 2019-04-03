@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.microthingsexperiment.circuitbreaker.fallback.AbstractFallbackStrategy;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
 @Component
 @Profile("EnableCircuitBreaker")
@@ -22,7 +23,10 @@ public class HttpCircuitBreakerService implements CircuitBreakerService {
 	public Logger logger = LoggerFactory.getLogger(getClass());
 
 	
-	@HystrixCommand(fallbackMethod="responseFallback")
+	@HystrixCommand(fallbackMethod="responseFallback", commandProperties = {
+			@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "0"),
+	        @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "1")
+	})
 	public <T> T executeGetRequest(String url, Class<T> responseType, String cacheKey) {
 		
 		logger.info("Starting:"+"CB.executeGetRequest("+url+")");
