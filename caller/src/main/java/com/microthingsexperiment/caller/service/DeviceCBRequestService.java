@@ -17,14 +17,15 @@ public class DeviceCBRequestService implements RemoteRequestService {
 	private ActiveProfiles profiles;
 	@SuppressWarnings("unchecked")
 	@Override
-	public Double requestData(String host, String deviceId) {
-		String devicePort = deviceId;
+	public Double requestData(String deviceHost, String devicePort) {
+		String deviceId = deviceHost+":"+devicePort;
 		
 		Double response = null;
+		
 		if (profiles.isCacheActive()) {
-			response = cbService.executeGetRequest("http://"+ host + ":"+ devicePort +"/device", Double.class, deviceId);
+			response = cbService.executeGetRequest("http://"+ deviceHost + ":"+ devicePort +"/device", Double.class, deviceId);
 		} else {
-			response = cbService.executeGetRequest("http://"+ host + ":"+ devicePort +"/device", Double.class);
+			response = cbService.executeGetRequest("http://"+ deviceHost + ":"+ devicePort +"/device", Double.class);
 		}
 		
 		return response;

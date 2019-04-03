@@ -47,13 +47,13 @@ public class GatewayRequestService implements RemoteRequestService {
 			
 			HttpEntity<HttpHeaders> httpEntity = new HttpEntity<>(headers);
 			
-			logger.info("Request Started: "+baseUrl);
+			logger.info("Request Started: "+baseUrl+"->["+host+":"+port+"]");
 
 			ResponseEntity<Double> response = restTemplate.exchange(baseUrl, HttpMethod.GET, httpEntity, Double.class);
 			
 			result = response.getBody();
 			
-			logger.info("Request Returned: "+baseUrl);
+			logger.info("Request Returned: "+baseUrl+"->["+host+":"+port+"]");
 			
 		} catch (Exception ex) {
 			logger.info("Failure Requesting: "+baseUrl);

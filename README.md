@@ -20,10 +20,14 @@ O Caller tem dependência do projeto **Circuit Breaker**, pois ele pode utilizar
    * ` spring.profiles.active `: define os profiles de configuração do Caller. 
       * O profile `average` configura o Caller para computar os dados oriundos dos dispositivos, realizando uma média deles.
       * O profile `gatewayRequest` configura o Caller deve executar as requisições para o Gateway, em vez de requisitar diretamente para os microserviços de IoT Device.
+      * `deviceCBRequest` configura o Caller de modo a utilizar o CB para realizar requisições diretamenten aos dispositivos.
+      * `deviceRequest` configura o Caller para realizar requisições diretamenten aos dispositivos, sem CB e Gateway.
+      * `EnableCircuitBreaker` permite a criação da classe CircuitBreakerConfig, que contem a anotação @EnableCircuitBreaker, habilitando o comportamento do CB.
    
    * `server.port`: define a porta em que o Caller estará executando.
    * `request.host`: define o endereço de host do Gateway para o qual o Caller realizará as requisições.
    * `request.port`: define a porta do Gateway para o qual o Caller realizará as requisições.
+   * `request.timeout`: define o tempo de timeout para as requisições.
 
    ##### Exemplo
     --spring.profiles.active=average,gatewayRequest --server.port=8081 --request.host=localhost --request.port=8086
@@ -36,7 +40,7 @@ O Caller tem dependência do projeto **Circuit Breaker**, pois ele pode utilizar
     * `cacheStrategy` define que o Circuit Breaker deve utilizar a estragégia de fallback de Cache, caso ele identifique uma falha.
     * `exceptionStrategy` define que o Circuit Breaker deve utilizar a estratégia de fallback de Exceção, caso ele identifique uma falha.
   * `cache.expirationTime`: se utilizar o profile de **cacheStrategy**, deve-se definir o tempo em que o dado armazenado em cache irá expirar.
-  * `timeout`: define o tempo que o Circuit Breaker deve aguardar, até disparar um TimeoutException.
+  * `request.timeout`: define o tempo que o Circuit Breaker deve aguardar, até disparar um TimeoutException.
   
 ## IoT Gateway
 

@@ -46,6 +46,7 @@ public class HttpCircuitBreakerService implements CircuitBreakerService {
 	}
 	
 	public <T> T responseFallback(String url, Class<T> responseType, String cacheKey) throws Exception {
+		
 		logger.info("Executing Fallback ["+fallback.getClass().getName()+"]");
 		
 		T cachedResult = fallback.getDefaultFallback(cacheKey, responseType);
