@@ -46,7 +46,7 @@ public class CacheService {
 	@Scheduled(initialDelay = 1000, fixedRate = 1000)
 	public void clearCache() {
 
-		logger.info("Cache Cleaner Started");
+		//logger.info("Cache Cleaner Started");
 
 		Set<Entry<String, CacheWrapper>> entrySet = cache.entrySet();
 		Iterator<Entry<String, CacheWrapper>> cacheIterator = entrySet.iterator();
@@ -63,7 +63,7 @@ public class CacheService {
 			}
 		}
 		
-		logger.info("Cache Cleaner Finished");
+		//logger.info("Cache Cleaner Finished");
 
 	}
 

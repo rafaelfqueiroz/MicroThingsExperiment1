@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-	
+
 	<include
 		resource="org/springframework/boot/logging/logback/base.xml" />
-		
+
 	<logger name="org.springframework.web" level="OFF" />
-		
+
 	<appender name="apppender-experiment"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<rollingPolicy
@@ -14,18 +14,28 @@
 			</fileNamePattern>
 		</rollingPolicy>
 		<encoder>
-			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+			</pattern>
 		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+			<onMatch>ACCEPT</onMatch>
+		</filter>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>DENY</onMatch>
+		</filter>
 	</appender>
-	
+
 	<appender name="CONSOLE"
 		class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
 			<pattern>%msg%n</pattern>
 		</encoder>
 	</appender>
-	
-	<logger name="com.microthingsexperiment" level="INFO" additivity="true">
+
+	<logger name="com.microthingsexperiment" level="INFO"
+		additivity="true">
 		<appender-ref ref="apppender-experiment" />
 	</logger>
 </configuration>
