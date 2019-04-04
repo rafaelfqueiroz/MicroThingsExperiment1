@@ -1,0 +1,3 @@
+16:23:41.466 [Test worker] INFO  c.m.i.IoTDeviceServiceApplicationTests - Starting IoTDeviceServiceApplicationTests on UOS-210969 with PID 6320 (started by ga1e18 in C:\Local\MicroThingsExperiment1\iotdeviceservice)
+16:23:41.466 [Test worker] INFO  c.m.i.IoTDeviceServiceApplicationTests - No active profile set, falling back to default profiles: default
+16:23:43.015 [Test worker] INFO  c.m.i.IoTDeviceServiceApplicationTests - Started IoTDeviceServiceApplicationTests in 1.772 seconds (JVM running for 2.699)

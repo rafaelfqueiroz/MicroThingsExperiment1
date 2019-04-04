@@ -1,0 +1,17 @@
+10:38:58.660 [Test worker] INFO  c.m.i.IoTDeviceServiceApplicationTests - Starting IoTDeviceServiceApplicationTests on UOS-210969 with PID 6108 (started by ga1e18 in C:\Local\MicroThingsExperiment1\iotdeviceservice)
+10:38:58.660 [Test worker] INFO  c.m.i.IoTDeviceServiceApplicationTests - No active profile set, falling back to default profiles: default
+10:38:59.424 [Test worker] INFO  c.m.i.datareader.SerieFileReader - Starting the load of the data series
+10:38:59.424 [Test worker] INFO  c.m.i.datareader.SerieFileReader - Data series loaded
+10:38:59.443 [Test worker] INFO  c.m.i.failure.FailureManager - Starting the load of failures definition from file
+10:38:59.445 [Test worker] INFO  c.m.i.failure.FailureManager - Failures definition loaded
+10:39:00.222 [Test worker] INFO  c.m.i.IoTDeviceServiceApplicationTests - Started IoTDeviceServiceApplicationTests in 1.763 seconds (JVM running for 2.717)
+10:57:40.453 [Test worker] INFO  c.m.i.IoTDeviceServiceApplicationTests - Starting IoTDeviceServiceApplicationTests on UOS-210969 with PID 1844 (started by ga1e18 in C:\Local\MicroThingsExperiment1\iotdeviceservice)
+10:57:40.453 [Test worker] INFO  c.m.i.IoTDeviceServiceApplicationTests - No active profile set, falling back to default profiles: default
+10:57:41.351 [Test worker] INFO  c.m.i.datareader.SerieFileReader - Starting the load of the data series
+10:57:41.351 [Test worker] INFO  c.m.i.datareader.SerieFileReader - Data series loaded
+10:57:42.321 [Test worker] INFO  c.m.i.IoTDeviceServiceApplicationTests - Started IoTDeviceServiceApplicationTests in 2.113 seconds (JVM running for 3.157)
+17:38:51.127 [Test worker] INFO  c.m.i.IoTDeviceServiceApplicationTests - Starting IoTDeviceServiceApplicationTests on UOS-210969 with PID 9772 (started by ga1e18 in C:\Local\MicroThingsExperiment1\iotdeviceservice)
+17:38:51.127 [Test worker] INFO  c.m.i.IoTDeviceServiceApplicationTests - No active profile set, falling back to default profiles: default
+17:38:51.877 [Test worker] INFO  c.m.i.datareader.SerieFileReader - Starting the load of the data series
+17:38:51.893 [Test worker] INFO  c.m.i.datareader.SerieFileReader - Data series loaded
+17:38:52.712 [Test worker] INFO  c.m.i.IoTDeviceServiceApplicationTests - Started IoTDeviceServiceApplicationTests in 1.819 seconds (JVM running for 2.75)

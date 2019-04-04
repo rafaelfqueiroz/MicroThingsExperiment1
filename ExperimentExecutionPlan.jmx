@@ -302,7 +302,7 @@
             </value>
           </objProp>
           <stringProp name="filename"></stringProp>
-          <stringProp name="RespTimeGraph.interval">1000</stringProp>
+          <stringProp name="RespTimeGraph.interval">500</stringProp>
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
