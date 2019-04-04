@@ -14,53 +14,47 @@ import com.microthingsexperiment.ActiveProfiles;
 import com.microthingsexperiment.circuitbreaker.CircuitBreakerService;
 import com.microthingsexperiment.iotgateway.Setup;
 
-
 @RestController
 @RequestMapping("/gateway")
 public class IoTGatewayController {
-	
+
 	@Autowired
 	private CircuitBreakerService cbService;
 	@Autowired
 	private Setup setup;
-	
-	@Autowired
-	private ActiveProfiles profiles;
-	
+
 	public Logger logger = LoggerFactory.getLogger(getClass());
-	
+
 	@GetMapping
-	public Double getDeviceValue(@RequestHeader("device-host") String deviceHost, @RequestHeader("device-port") String devicePort) {
-		String deviceId = deviceHost+":"+devicePort;
-		
-		logger.info("Starting:"+"Gateway.getDeviceValue("+deviceId+")");
-		
+	public Double getDeviceValue(@RequestHeader("device-host") String deviceHost,
+			@RequestHeader("device-port") String devicePort) {
+		String deviceId = deviceHost + ":" + devicePort;
+
+		logger.info("Starting:" + "Gateway.getDeviceValue(" + deviceId + ")");
+
 		try {
 			Double response = null;
-			if (profiles.isCacheActive()) {
-				response = cbService.executeGetRequest("http://"+ deviceHost + ":"+ devicePort +"/device", Double.class, deviceId);
-			} else {
-				response = cbService.executeGetRequest("http://"+ deviceHost + ":"+ devicePort +"/device", Double.class);
-			}
-			
-			logger.info("Returning:"+"Gateway.getDeviceValue("+deviceId+"):"+response);
-			
+
+			response = cbService.executeGetRequest("http://" + deviceHost + ":" + devicePort + "/device", Double.class,
+					deviceId);
+
+			logger.info("Returning:" + "Gateway.getDeviceValue(" + deviceId + "):" + response);
+
 			return response;
-		} catch (Exception e){
-			logger.info("Failure:"+"Gateway.getDeviceValue("+deviceId+")");
-			logger.error("Failure to Gateway.getDeviceValue("+deviceId+")",e);
+		} catch (Exception e) {
+			logger.info("Failure:" + "Gateway.getDeviceValue(" + deviceId + ")");
+			logger.error("Failure to Gateway.getDeviceValue(" + deviceId + ")", e);
 			throw e;
 		}
-		
+
 	}
-	
+
 	@GetMapping("/setup")
 	public ResponseEntity<String> setup() {
 		setup.activate();
-		
-		
+
 		logger.info("Gateway.Setup:[]");
-		
+
 		return new ResponseEntity<>("SETUP OK", HttpStatus.OK);
 	}
 
