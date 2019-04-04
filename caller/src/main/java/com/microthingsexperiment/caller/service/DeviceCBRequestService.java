@@ -15,8 +15,6 @@ public class DeviceCBRequestService implements RemoteRequestService {
 
 	@Autowired
 	private CircuitBreakerService cbService;
-	@Autowired
-	private ActiveProfiles profiles;
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -33,11 +31,7 @@ public class DeviceCBRequestService implements RemoteRequestService {
 		try {
 			logger.info("Request Started: " + baseUrl);
 
-			if (profiles.isCacheActive()) {
-				result = cbService.executeGetRequest(baseUrl, Double.class, deviceId);
-			} else {
-				result = cbService.executeGetRequest(baseUrl, Double.class);
-			}
+			result = cbService.executeGetRequest(baseUrl, Double.class, deviceId);
 
 			logger.info("Request Returned: " + baseUrl);
 
