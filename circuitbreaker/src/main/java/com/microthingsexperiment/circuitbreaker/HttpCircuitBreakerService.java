@@ -9,56 +9,27 @@ import org.springframework.web.client.RestTemplate;
 
 import com.microthingsexperiment.ActiveProfiles;
 import com.microthingsexperiment.circuitbreaker.fallback.AbstractFallbackStrategy;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
 @Component
 @Profile("EnableCircuitBreaker")
-public class HttpCircuitBreakerService implements CircuitBreakerService {
+public class HttpCircuitBreakerService<T> implements CircuitBreakerService<T> {
 
 	@Autowired
 	private RestTemplate restTemplate;
 	@Autowired
-	private AbstractFallbackStrategy fallback;
-
+	private AbstractFallbackStrategy<T> fallback;
 	@Autowired
 	private ActiveProfiles profiles;
+	@Autowired
+	private CircuitBreakerProperties properties;
 
 	public Logger logger = LoggerFactory.getLogger(getClass());
-
-//	@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "0"),
-
-	@HystrixCommand(fallbackMethod = "responseFallback", commandProperties = {
-			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "1"),
-			@HystrixProperty(name = "metrics.rollingStats.timeInMilliseconds", value = "1000")		
 	
-	})
-	public <T> T executeGetRequest(String url, Class<T> responseType, String cacheKey) {
-
-		logger.info("Starting:" + "CB.executeGetRequest(" + url + ")");
-
-		T response = restTemplate.getForObject(url, responseType);
-
-		if (profiles.isCacheActive()) {
-
-			fallback.updateDefaultValue(cacheKey, response);
-		}
-
-		logger.info("Returning:" + "CB.executeGetRequest(" + url + "):" + response);
+	public T executeGetRequest(String url, String deviceId, Class<? extends T> clazz) {
+		
+		T response = new CustomDeviceHystrixCommand<>(url, deviceId, restTemplate, fallback, properties, clazz).execute();
 
 		return response;
 	}
-
-
-	public <T> T responseFallback(String url, Class<T> responseType, String cacheKey) throws Exception {
-
-		logger.info("Executing Fallback [" + fallback.getClass().getName() + "]");
-
-		T cachedResult = fallback.getDefaultFallback(cacheKey, responseType);
-
-		logger.info("Fallback cached result  [" + cachedResult + "]");
-
-		return cachedResult;
-	}
-
+	
 }

@@ -10,7 +10,7 @@ import com.microthingsexperiment.circuitbreaker.cache.CacheService;
 
 @Component
 @Profile("cacheStrategy")
-public class FallbackCacheStrategy extends AbstractFallbackStrategy {
+public class FallbackCacheStrategy<T> extends AbstractFallbackStrategy<T> {
 	
 	@Autowired
 	private CacheService service;
@@ -19,13 +19,13 @@ public class FallbackCacheStrategy extends AbstractFallbackStrategy {
 
 	
 	@Override
-	public void updateDefaultValue(String deviceId, Object value) {
+	public void updateDefaultValue(String deviceId, T value) {
 		service.put(deviceId, value);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T getDefaultFallback(String deviceId, Class<T> clazz) throws Exception {
+	public T getDefaultFallback(String deviceId) throws RuntimeException {
 		
 		Object value = service.getValue(deviceId);
 		

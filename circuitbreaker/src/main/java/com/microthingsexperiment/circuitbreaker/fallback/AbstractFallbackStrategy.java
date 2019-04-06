@@ -1,12 +1,12 @@
 package com.microthingsexperiment.circuitbreaker.fallback;
 
-public abstract class AbstractFallbackStrategy {
+public abstract class AbstractFallbackStrategy<T> {
 
-	public <T> T getDefaultFallback(String deviceId, Class<T> clazz) throws Exception {
+	public T getDefaultFallback(String deviceId) throws RuntimeException {
 		return null;
 	}
 	
-	public void updateDefaultValue(String deviceId, Object value) {
+	public void updateDefaultValue(String deviceId, T value) {
 	}
 	
 }

@@ -8,5 +8,5 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @Profile({"EnableCircuitBreaker", "cacheStrategy"})
 public class CacheConfiguration {
-
+	
 }

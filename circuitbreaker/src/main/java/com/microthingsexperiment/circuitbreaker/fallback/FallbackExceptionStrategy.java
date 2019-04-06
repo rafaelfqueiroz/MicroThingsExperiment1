@@ -5,11 +5,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Profile("exceptionStrategy")
-public class FallbackExceptionStrategy extends AbstractFallbackStrategy {
+public class FallbackExceptionStrategy<T> extends AbstractFallbackStrategy<T> {
 
 	@Override
-	public <T> T getDefaultFallback(String deviceId, Class<T> clazz) throws Exception {
-		throw new Exception("Circuit Breaker has no valid value.");
+	public T getDefaultFallback(String deviceId) throws RuntimeException {
+		throw new RuntimeException("Circuit Breaker has no valid value.");
 	}
 	
 }
