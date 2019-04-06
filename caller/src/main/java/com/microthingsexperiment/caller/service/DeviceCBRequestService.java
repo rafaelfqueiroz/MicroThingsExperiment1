@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import com.microthingsexperiment.ActiveProfiles;
 import com.microthingsexperiment.circuitbreaker.CircuitBreakerService;
 
 @Component
@@ -14,7 +13,7 @@ import com.microthingsexperiment.circuitbreaker.CircuitBreakerService;
 public class DeviceCBRequestService implements RemoteRequestService {
 
 	@Autowired
-	private CircuitBreakerService cbService;
+	private CircuitBreakerService<Double> cbService;
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -31,7 +30,7 @@ public class DeviceCBRequestService implements RemoteRequestService {
 		try {
 			logger.info("Request Started: " + baseUrl);
 
-			result = cbService.executeGetRequest(baseUrl, Double.class, deviceId);
+			result = cbService.executeGetRequest(baseUrl, deviceId, Double.class);
 
 			logger.info("Request Returned: " + baseUrl);
 
