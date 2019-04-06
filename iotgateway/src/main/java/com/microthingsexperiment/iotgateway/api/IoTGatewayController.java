@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.microthingsexperiment.ActiveProfiles;
 import com.microthingsexperiment.circuitbreaker.CircuitBreakerService;
 import com.microthingsexperiment.iotgateway.Setup;
 
@@ -19,7 +18,7 @@ import com.microthingsexperiment.iotgateway.Setup;
 public class IoTGatewayController {
 
 	@Autowired
-	private CircuitBreakerService cbService;
+	private CircuitBreakerService<Double> cbService;
 	@Autowired
 	private Setup setup;
 
@@ -35,8 +34,8 @@ public class IoTGatewayController {
 		try {
 			Double response = null;
 
-			response = cbService.executeGetRequest("http://" + deviceHost + ":" + devicePort + "/device", Double.class,
-					deviceId);
+			response = cbService.executeGetRequest("http://" + deviceHost + ":" + devicePort + "/device",
+					deviceId, Double.class);
 
 			logger.info("Returning:" + "Gateway.getDeviceValue(" + deviceId + "):" + response);
 
