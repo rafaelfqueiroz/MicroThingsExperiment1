@@ -3,6 +3,7 @@ package com.microthingsexperiment.caller.api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -36,8 +37,7 @@ public class CallerController {
 			Double computedValue = service.compute();
 			
 			logger.info("Returning:"+"Caller.call():"+computedValue);
-			
-			
+
 			response = new ResponseEntity<>(computedValue, HttpStatus.OK);
 			
 		} catch (Exception e) {
@@ -45,7 +45,10 @@ public class CallerController {
 			logger.info("Failure:"+"Caller.call()");
 			logger.error("Failure to Caller.call()",e);
 			
-			response = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("error-message", e.getCause().toString());
+			
+			response = new ResponseEntity<>(headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 		return response;

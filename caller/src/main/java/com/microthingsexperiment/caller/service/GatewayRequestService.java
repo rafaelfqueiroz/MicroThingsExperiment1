@@ -38,8 +38,6 @@ public class GatewayRequestService implements RemoteRequestService {
 		Double result =null;
 
 		try {	
-			
-			
 			HttpHeaders headers = new HttpHeaders();
 			
 			headers.add("device-host", host);
@@ -57,7 +55,7 @@ public class GatewayRequestService implements RemoteRequestService {
 			
 		} catch (Exception ex) {
 			logger.info("Failure Requesting: "+baseUrl);
-			throw ex;
+			throw new RuntimeException(ex);
 
 		}
 		
