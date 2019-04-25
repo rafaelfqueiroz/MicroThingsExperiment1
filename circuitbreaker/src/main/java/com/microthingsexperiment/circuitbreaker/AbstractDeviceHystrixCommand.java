@@ -2,6 +2,7 @@ package com.microthingsexperiment.circuitbreaker;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestTemplate;
 
 import com.microthingsexperiment.circuitbreaker.fallback.AbstractFallbackStrategy;
@@ -10,7 +11,7 @@ import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandKey;
 import com.netflix.hystrix.HystrixCommandProperties;
 
-public abstract class AbstractDeviceHystrixCommand<T> extends  HystrixCommand<T>  {
+public abstract class AbstractDeviceHystrixCommand<T> extends  HystrixCommand<ResponseWrapper<T>>  {
 	public Logger logger = LoggerFactory.getLogger(getClass());
 	
 	private String url;
@@ -28,6 +29,8 @@ public abstract class AbstractDeviceHystrixCommand<T> extends  HystrixCommand<T>
 							HystrixCommandProperties.Setter()
 								.withCircuitBreakerRequestVolumeThreshold(properties.getRequestVolumeThreshold())
 								.withMetricsRollingStatisticalWindowInMilliseconds(properties.getMetricsRollingStatsTimeInMilliseconds())
+								//.withCircuitBreakerSleepWindowInMilliseconds(12000)
+								.withRequestCacheEnabled(false)
 							)
 					.andCommandKey(HystrixCommandKey.Factory.asKey(deviceId))
 				);
@@ -68,14 +71,14 @@ public abstract class AbstractDeviceHystrixCommand<T> extends  HystrixCommand<T>
 	}
 	
 	@Override
-	protected T getFallback() {
+	protected ResponseWrapper<T> getFallback() {
 		logger.info("Executing Fallback [" + getFallbackStrategy().getClass().getName() + "][" + deviceId + "]");
 		
 		T fallbackResult = getFallbackStrategy().getDefaultFallback(getDeviceId());
 		
 		logger.info("Fallback result  [" + fallbackResult + "][" + deviceId + "]");
 		
-		return fallbackResult;
+		return new ResponseWrapper<>(HttpStatus.PARTIAL_CONTENT, fallbackResult);
 	}
 	
 	protected Class<? extends T> getClazzType() {

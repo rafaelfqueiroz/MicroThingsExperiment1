@@ -2,6 +2,7 @@ package com.microthingsexperiment.circuitbreaker;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestTemplate;
 
 import com.microthingsexperiment.circuitbreaker.fallback.AbstractFallbackStrategy;
@@ -15,11 +16,11 @@ public class CustomDeviceHystrixCommand<T> extends AbstractDeviceHystrixCommand<
 	}
 	
 	@Override
-	protected T run() throws Exception {
+	protected ResponseWrapper<T> run() throws Exception {
 		return executeGetRequest(getUrl(), getDeviceId());
 	}
 	
-	private T executeGetRequest(String url, String cacheKey) {
+	private ResponseWrapper<T> executeGetRequest(String url, String cacheKey) {
 
 		logger.info("Starting:" + "CB.executeGetRequest(" + url + ")");
 
@@ -29,7 +30,7 @@ public class CustomDeviceHystrixCommand<T> extends AbstractDeviceHystrixCommand<
 
 		logger.info("Returning:" + "CB.executeGetRequest(" + url + "):" + response);
 
-		return response;
+		return new ResponseWrapper<>(HttpStatus.OK, response);
 	}
 
 	

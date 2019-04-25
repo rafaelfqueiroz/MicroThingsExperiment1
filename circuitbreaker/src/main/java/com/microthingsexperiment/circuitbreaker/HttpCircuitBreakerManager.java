@@ -12,7 +12,7 @@ import com.microthingsexperiment.circuitbreaker.fallback.AbstractFallbackStrateg
 
 @Component
 @Profile("EnableCircuitBreaker")
-public class HttpCircuitBreakerService<T> implements CircuitBreakerService<T> {
+public class HttpCircuitBreakerManager<T> implements CircuitBreakerManager<T> {
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -25,9 +25,9 @@ public class HttpCircuitBreakerService<T> implements CircuitBreakerService<T> {
 
 	public Logger logger = LoggerFactory.getLogger(getClass());
 	
-	public T executeGetRequest(String url, String deviceId, Class<? extends T> clazz) {
+	public ResponseWrapper<T> executeGetRequest(String url, String deviceId, Class<? extends T> clazz) {
 		
-		T response = new CustomDeviceHystrixCommand<>(url, deviceId, restTemplate, fallback, properties, clazz).execute();
+		ResponseWrapper<T> response = new CustomDeviceHystrixCommand<>(url, deviceId, restTemplate, fallback, properties, clazz).execute();
 
 		return response;
 	}
