@@ -16,5 +16,4 @@ public class ApplicationConfiguration {
 				.setReadTimeout(Duration.ofMillis(timeout));
 	}
 	
-	
 }

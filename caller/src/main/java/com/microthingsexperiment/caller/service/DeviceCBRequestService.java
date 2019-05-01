@@ -37,8 +37,8 @@ public class DeviceCBRequestService implements RemoteRequestService {
 			logger.info("Request Returned: " + baseUrl);
 
 		} catch (Exception ex) {
-			logger.info("Failure Requesting: " + baseUrl);
-			throw ex;
+			logger.info("Failure Requesting: "+baseUrl);
+			throw new RuntimeException(baseUrl, ex);
 		}
 		return result;
 	}

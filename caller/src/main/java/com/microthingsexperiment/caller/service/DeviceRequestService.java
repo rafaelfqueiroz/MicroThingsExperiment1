@@ -43,6 +43,7 @@ public class DeviceRequestService implements RemoteRequestService {
 
 		} catch (Exception ex) {
 			logger.info("Failure Requesting: "+baseUrl);
+			//throw new RuntimeException(baseUrl, ex);
 			throw ex;
 		}
 		return result;
