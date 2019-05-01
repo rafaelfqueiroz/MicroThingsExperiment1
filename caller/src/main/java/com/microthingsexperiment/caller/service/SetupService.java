@@ -2,6 +2,7 @@ package com.microthingsexperiment.caller.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -13,7 +14,6 @@ import com.microthingsexperiment.caller.service.registration.Device;
 @Component
 public class SetupService {
 
-	@Autowired
 	private RestTemplate restTemplate;
 
 	@Autowired
@@ -26,6 +26,11 @@ public class SetupService {
 
 	@Value("${timeout:1000}")
 	private int timeout;
+	
+	public SetupService(RestTemplateBuilder rtBuilder) {
+		this.restTemplate = rtBuilder.build();
+	}
+	
 
 	public void initializeSetup() {
 		setup.activate();

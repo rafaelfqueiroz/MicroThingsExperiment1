@@ -6,19 +6,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class ApplicationConfiguration {
-
-	@Value("${request.timeout}")
-	private long timeout;
 	
 	@Bean
-	public RestTemplate restTemplate() {
-		RestTemplateBuilder builder = new RestTemplateBuilder();
-		return builder.setConnectTimeout(Duration.ofMillis(timeout))
-				.setReadTimeout(Duration.ofMillis(timeout)).build();
+	public RestTemplateBuilder restTemplateBuilder(@Value("${request.timeout}")long timeout) {
+		return new RestTemplateBuilder().setConnectTimeout(Duration.ofMillis(timeout))
+				.setReadTimeout(Duration.ofMillis(timeout));
 	}
+	
 	
 }
