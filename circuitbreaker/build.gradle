@@ -30,6 +30,7 @@ ext {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
+	implementation 'org.eclipse.californium:californium-core:2.0.0-M15'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'
 	implementation('org.springframework.boot:spring-boot-starter-web')
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
