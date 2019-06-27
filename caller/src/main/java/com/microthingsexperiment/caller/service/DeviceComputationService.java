@@ -24,14 +24,14 @@ public class DeviceComputationService implements DeviceComputation {
 	@Override
 	public Double compute() {
 		
-		List<Double> temperatures = new ArrayList<>();
+		List<Double> presences = new ArrayList<>();
 		
 		for (Device device : serviceRegistry.getDevices()) {
-			temperatures.add(
+			presences.add(
 						remoteService.requestData(device.getHost(), device.getPort())
 					);
 		}
-		return temperatures.stream().mapToDouble(a -> a).average().getAsDouble();
+		return presences.stream().mapToDouble(a -> a).average().getAsDouble();
 	}
 
 }
