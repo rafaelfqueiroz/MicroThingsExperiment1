@@ -1,4 +1,4 @@
-package com.microthingsexperiment.caller.service;
+package com.microthingsexperiment.caller.service.request;
 
 public interface RemoteRequestService {
 

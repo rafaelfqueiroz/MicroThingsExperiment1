@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.microthingsexperiment.caller.service.DeviceComputationService;
-import com.microthingsexperiment.caller.service.SetupService;
+import com.microthingsexperiment.caller.service.HttpSetup;
 
 @Controller
 @RequestMapping("/caller")
@@ -21,7 +21,7 @@ public class CallerController {
 	private DeviceComputationService service;
 	
 	@Autowired
-	private SetupService setupService;
+	private HttpSetup setupService;
 	
 	public Logger logger = LoggerFactory.getLogger(getClass());
 	

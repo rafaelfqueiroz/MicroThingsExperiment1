@@ -1,8 +1,7 @@
-package com.microthingsexperiment.caller.service;
+package com.microthingsexperiment.caller.service.request;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Profile;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-@Profile("gatewayRequest")
+@Profile("gatewayRequest & http")
 public class GatewayRequestService implements RemoteRequestService {
 
 	private RestTemplate restTemplate;

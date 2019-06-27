@@ -1,4 +1,4 @@
-package com.microthingsexperiment.caller.service;
+package com.microthingsexperiment.caller.service.request;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

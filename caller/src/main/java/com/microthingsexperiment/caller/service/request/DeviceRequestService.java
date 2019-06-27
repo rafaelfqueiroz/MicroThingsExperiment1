@@ -1,4 +1,4 @@
-package com.microthingsexperiment.caller.service;
+package com.microthingsexperiment.caller.service.request;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-@Profile("deviceRequest")
+@Profile("deviceRequest & http")
 public class DeviceRequestService implements RemoteRequestService {
 
 	private RestTemplate restTemplate;
