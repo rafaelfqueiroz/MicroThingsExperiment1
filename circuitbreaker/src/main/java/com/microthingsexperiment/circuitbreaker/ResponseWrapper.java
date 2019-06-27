@@ -1,22 +1,20 @@
 package com.microthingsexperiment.circuitbreaker;
 
-import org.springframework.http.HttpStatus;
-
 public class ResponseWrapper<T> {
 	
-	private HttpStatus status;
+	private int statusCode;
 	private T response;
 	
-	public ResponseWrapper(HttpStatus status, T response) {
-		setStatus(status);
+	public ResponseWrapper(int statusCode, T response) {
+		setStatusCode(statusCode);
 		setResponse(response);
 	}
 	
-	public HttpStatus getStatus() {
-		return status;
+	public int getStatusCode() {
+		return statusCode;
 	}
-	public void setStatus(HttpStatus status) {
-		this.status = status;
+	public void setStatusCode(int statusCode) {
+		this.statusCode = statusCode;
 	}
 	public T getResponse() {
 		return response;

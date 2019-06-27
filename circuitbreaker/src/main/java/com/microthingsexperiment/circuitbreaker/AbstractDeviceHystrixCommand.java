@@ -3,7 +3,6 @@ package com.microthingsexperiment.circuitbreaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.client.RestTemplate;
 
 import com.microthingsexperiment.circuitbreaker.fallback.AbstractFallbackStrategy;
 import com.netflix.hystrix.HystrixCommand;
@@ -16,12 +15,11 @@ public abstract class AbstractDeviceHystrixCommand<T> extends  HystrixCommand<Re
 	
 	private String url;
 	private String deviceId;
-	private RestTemplate restTemplate;
 	private AbstractFallbackStrategy<T> fallbackStrategy;
 	private Class<? extends T> clazzType;
 	
-	public AbstractDeviceHystrixCommand(String url, String deviceId, RestTemplate restTemplate, 
-			AbstractFallbackStrategy<T> fallback,  CircuitBreakerProperties properties, Class<? extends T> clazzType) {
+	public AbstractDeviceHystrixCommand(String url, String deviceId, AbstractFallbackStrategy<T> fallback, 
+			CircuitBreakerProperties properties, Class<? extends T> clazzType) {
 		super(
 				Setter
 					.withGroupKey(HystrixCommandGroupKey.Factory.asKey(deviceId))
@@ -36,7 +34,6 @@ public abstract class AbstractDeviceHystrixCommand<T> extends  HystrixCommand<Re
 				);
 		setDeviceIdt(deviceId);
 		setUrl(url);
-		setRestTemplate(restTemplate);
 		setFallbackStrategy(fallback);
 		setClazzType(clazzType);
 	}
@@ -57,12 +54,6 @@ public abstract class AbstractDeviceHystrixCommand<T> extends  HystrixCommand<Re
 		this.url = url;
 	}
 	
-	protected RestTemplate getRestTemplate() {
-		return this.restTemplate;
-	}
-	private void setRestTemplate(RestTemplate restTemplate) {
-		this.restTemplate = restTemplate;
-	}
 	protected AbstractFallbackStrategy<T> getFallbackStrategy() {
 		return this.fallbackStrategy;
 	}
@@ -78,7 +69,7 @@ public abstract class AbstractDeviceHystrixCommand<T> extends  HystrixCommand<Re
 		
 		logger.info("Fallback result  [" + fallbackResult + "][" + deviceId + "]");
 		
-		return new ResponseWrapper<>(HttpStatus.PARTIAL_CONTENT, fallbackResult);
+		return new ResponseWrapper<>(HttpStatus.PARTIAL_CONTENT.value(), fallbackResult);
 	}
 	
 	protected Class<? extends T> getClazzType() {

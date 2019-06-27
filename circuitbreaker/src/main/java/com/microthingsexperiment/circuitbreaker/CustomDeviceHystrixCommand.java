@@ -9,10 +9,13 @@ import com.microthingsexperiment.circuitbreaker.fallback.AbstractFallbackStrateg
 
 public class CustomDeviceHystrixCommand<T> extends AbstractDeviceHystrixCommand<T> {
 	public Logger logger = LoggerFactory.getLogger(getClass());
+	
+	private RestTemplate restTemplate;
 
 	public CustomDeviceHystrixCommand(String url, String deviceId, RestTemplate restTemplate, 
 			AbstractFallbackStrategy<T> fallback, CircuitBreakerProperties properties, Class<? extends T> clazz) {
-		super(url, deviceId, restTemplate, fallback, properties, clazz);
+		super(url, deviceId, fallback, properties, clazz);
+		setRestTemplate(restTemplate);
 	}
 	
 	@Override
@@ -30,9 +33,15 @@ public class CustomDeviceHystrixCommand<T> extends AbstractDeviceHystrixCommand<
 
 		logger.info("Returning:" + "CB.executeGetRequest(" + url + "):" + response);
 
-		return new ResponseWrapper<>(HttpStatus.OK, response);
+		return new ResponseWrapper<>(HttpStatus.OK.value(), response);
 	}
 
+	protected RestTemplate getRestTemplate() {
+		return this.restTemplate;
+	}
+	private void setRestTemplate(RestTemplate restTemplate) {
+		this.restTemplate = restTemplate;
+	}
 	
 
 

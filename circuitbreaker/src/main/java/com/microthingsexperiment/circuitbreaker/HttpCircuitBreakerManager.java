@@ -8,18 +8,15 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import com.microthingsexperiment.ActiveProfiles;
 import com.microthingsexperiment.circuitbreaker.fallback.AbstractFallbackStrategy;
 
 @Component
-@Profile("EnableCircuitBreaker")
+@Profile("EnableCircuitBreaker & http")
 public class HttpCircuitBreakerManager<T> implements CircuitBreakerManager<T> {
 
 	private RestTemplate restTemplate;
 	@Autowired
 	private AbstractFallbackStrategy<T> fallback;
-	@Autowired
-	private ActiveProfiles profiles;
 	@Autowired
 	private CircuitBreakerProperties properties;
 
