@@ -3,6 +3,7 @@ package com.microthingsexperiment.iotgateway.api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import com.microthingsexperiment.iotgateway.Setup;
 
 @RestController
 @RequestMapping("/gateway")
+@Profile("http")
 public class IoTGatewayController {
 
 	@Autowired
@@ -36,13 +38,13 @@ public class IoTGatewayController {
 		try {
 			Double response = null;
 
-			 ResponseWrapper<Double> wrapper = cbService.executeGetRequest("http://" + deviceHost + ":" + devicePort + "/device",
+			ResponseWrapper<Double> wrapper = cbService.executeGetRequest("http://" + deviceHost + ":" + devicePort + "/device",
 					deviceId, Double.class);
 
 			response = wrapper.getResponse();
 			logger.info("Returning:" + "Gateway.getDeviceValue(" + deviceId + "):" + response);
 
-			return new ResponseEntity<>(response, wrapper.getStatus());
+			return new ResponseEntity<>(response, HttpStatus.resolve(wrapper.getStatusCode()));
 		} catch (Exception e) {
 			logger.info("Failure:" + "Gateway.getDeviceValue(" + deviceId + ")");
 			logger.info("Failure message Gateway.getDeviceValue" + e.getMessage());
