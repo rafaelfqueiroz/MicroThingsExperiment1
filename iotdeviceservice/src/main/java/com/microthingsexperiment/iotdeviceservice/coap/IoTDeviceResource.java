@@ -1,24 +1,22 @@
-package com.microthingsexperiment.iotdeviceservice.rest;
+package com.microthingsexperiment.iotdeviceservice.coap;
 
+import org.eclipse.californium.core.CoapResource;
+import org.eclipse.californium.core.coap.CoAP.ResponseCode;
+import org.eclipse.californium.core.server.resources.CoapExchange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.stereotype.Component;
 
 import com.microthingsexperiment.iotdeviceservice.Setup;
 import com.microthingsexperiment.iotdeviceservice.datareader.DataReader;
 import com.microthingsexperiment.iotdeviceservice.failure.FailureManager;
 
-@Controller
-@Profile("http")
-@RequestMapping("/device")
-public class IoTDeviceController {
+@Component
+@Profile("coap")
+public class IoTDeviceResource extends CoapResource {
 	
 	@Autowired
 	private FailureManager failureManager;
@@ -26,19 +24,18 @@ public class IoTDeviceController {
 	private Setup setupManager;
 	@Autowired
 	private DataReader dataReader;
-	
 	@Value("${omission.duration:5000}")
 	private int omissionLockDuration;
 	
 	public Logger logger = LoggerFactory.getLogger(getClass());
+
+	public IoTDeviceResource() {
+		super("device");
+	}
 	
-	@GetMapping
-	public ResponseEntity<Double> getDeviceData() {
-		
+	@Override
+	public void handleGET(CoapExchange exchange) {
 		logger.info("Starting:"+"getDeviceData()");
-		
-		ResponseEntity<Double> response;
-		
 		
 		try {
 			if (failureManager.isFailed()) {
@@ -46,14 +43,14 @@ public class IoTDeviceController {
 				  logger.info("Omission:IoTDevice.getDeviceData()[ExecutionTime(ms)="+ setupManager.getExecutionTime() + "]");
 				   wait(omissionLockDuration);
 				}
-				response = new ResponseEntity<Double>(HttpStatus.SERVICE_UNAVAILABLE);
+				exchange.respond(ResponseCode.SERVICE_UNAVAILABLE);
 			}
 			else {
 				Double reading = dataReader.getNextValue();
 				
 				logger.info("Returning:"+"IoTDevice.getDeviceData():"+reading);
 				
-				response = new ResponseEntity<Double>(reading, HttpStatus.OK);	
+				exchange.respond(ResponseCode._UNKNOWN_SUCCESS_CODE, reading.toString());
 			}
 			
 			
@@ -61,26 +58,9 @@ public class IoTDeviceController {
 			logger.info("Failure:"+"IoTDevice.getDeviceData()");
 			logger.error("Failure to IoTDevice.getDeviceData",e);
 			
-			response = new ResponseEntity<Double>(HttpStatus.INTERNAL_SERVER_ERROR);
+			exchange.respond(ResponseCode.INTERNAL_SERVER_ERROR);
 		}
 		
-		return response;
 	}
-	
-	@GetMapping("/setup")
-	public ResponseEntity<String> setup() {
-		
-		logger.info("Starting IoTDevice.Setup:[]");
-		
-		setupManager.activate();		
-		failureManager.isFailed();
-		dataReader.setup();
-		
-		logger.info("Finishing IoTDevice.Setup:[]");
-		
-		
-		return new ResponseEntity<>("SETUP OK", HttpStatus.OK);
-	}
-
 
 }
