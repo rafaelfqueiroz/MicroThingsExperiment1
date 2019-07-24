@@ -30,7 +30,7 @@ repositories {
 
 dependencies {
 	compile project(':circuitbreaker')
-	
+	implementation 'org.eclipse.californium:californium-core:2.0.0-M15'
 	implementation 'org.springframework.boot:spring-boot-starter-logging'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.coap.MediaTypeRegistry;
+import org.eclipse.californium.core.coap.Request;
 import org.eclipse.californium.elements.exception.ConnectorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,15 @@ public class CoapSetup extends SetupService {
 	
 	@Override
 	public void setupDevices() {
+		
+		for (Device device : getServiceRegistry().getDevices()) {
+			requestForSetup(
+							new StringBuilder("coap://")
+							.append(device.getHost()).append(":")
+							.append(device.getPort()).append("/device").toString()
+						);
+		}
+		
 		for (Device device : getServiceRegistry().getDevices()) {
 			requestForSetup(
 							new StringBuilder("coap://")
@@ -31,6 +41,31 @@ public class CoapSetup extends SetupService {
 
 	@Override
 	public void setupGateway() {
+		
+//		String baseUrl = new StringBuilder("coap://")
+//				.append(getServiceRegistry().getGateway().getHost())
+//				.append(":")
+//				.append(getServiceRegistry().getGateway().getPort())
+//				.append("/gateway").toString();
+//		
+//		String host = getServiceRegistry().getDevices().get(0).getHost();
+//		String deviceId = getServiceRegistry().getDevices().get(0).getPort();
+//		
+//		Request request = Request.newGet();
+//		request.getOptions()
+//				.setAccept(MediaTypeRegistry.APPLICATION_JSON)
+//				.setUriQuery(new StringBuilder("host=").append(host).append("&").append("deviceId=").append(deviceId).toString())
+//				.addUriQuery(host).addUriQuery(deviceId);
+//
+//		CoapClient client = new CoapClient(baseUrl);
+//		try {
+//			String plainResponse = client.advanced(request).getResponseText();
+//		} catch (ConnectorException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+		
 		requestForSetup(
 						new StringBuilder("coap://")
 						.append(getServiceRegistry().getGateway().getHost())

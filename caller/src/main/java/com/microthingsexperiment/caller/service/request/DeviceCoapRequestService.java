@@ -1,8 +1,10 @@
 package com.microthingsexperiment.caller.service.request;
 
+import java.io.IOException;
+
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.coap.MediaTypeRegistry;
-import org.eclipse.californium.core.coap.Request;
+import org.eclipse.californium.elements.exception.ConnectorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,21 +38,19 @@ public class DeviceCoapRequestService implements RemoteRequestService {
 			CoapClient client = new CoapClient(baseUrl);
 			client.setTimeout(timeout);
 			
-			Request request = Request.newGet();
-			request.getOptions()
-					.setAccept(MediaTypeRegistry.APPLICATION_JSON)
-					.addUriQuery(host).addUriQuery(deviceId);
-
-			//String plainResponse = client.advanced(request).getResponseText();
 			String plainResponse = client.get(MediaTypeRegistry.APPLICATION_JSON).getResponseText();
 			ObjectMapper om = new ObjectMapper();
 			result = om.readValue(plainResponse, Double.class);
 			
 			logger.info("Request Returned: "+baseUrl);
 
-		} catch (Exception ex) {
+		} catch (RuntimeException ex) {
 			logger.info("Failure Requesting: "+baseUrl);
 			ex.printStackTrace();
+			throw ex;
+		} catch (ConnectorException | IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return result;
 	}

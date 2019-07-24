@@ -2,7 +2,6 @@ package com.microthingsexperiment.caller.service.request;
 
 import java.io.IOException;
 
-
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.coap.MediaTypeRegistry;
 import org.eclipse.californium.core.coap.Request;
@@ -57,8 +56,12 @@ public class GatewayCoapRequestService implements RemoteRequestService {
 
 			logger.info("Request Returned: "+baseUrl+"->["+host+":"+deviceId+"]");
 
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			throw e;
 		} catch (ConnectorException | IOException e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return result;
 	}

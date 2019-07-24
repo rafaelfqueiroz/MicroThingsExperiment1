@@ -1,6 +1,5 @@
 package com.microthingsexperiment.caller.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Profile;
@@ -8,8 +7,6 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import com.microthingsexperiment.ActiveProfiles;
-import com.microthingsexperiment.caller.Setup;
 import com.microthingsexperiment.caller.service.registration.Device;
 
 @Component
@@ -55,18 +52,41 @@ public class HttpSetup extends SetupService {
 
 	@Override
 	public void setupDevices() {
-		restTemplate.getForObject(
-				new StringBuilder("http://").append(getServiceRegistry().getGateway().getHost()).append(":")
-						.append(getServiceRegistry().getGateway().getPort()).append("/gateway/setup").toString(),
-				String.class);
-	}
-
-	@Override
-	public void setupGateway() {
+		
+		for (Device device : getServiceRegistry().getDevices()) {
+			restTemplate.getForObject(new StringBuilder("http://").append(device.getHost()).append(":")
+					.append(device.getPort()).append("/device").toString(), String.class);
+		}
+		
 		for (Device device : getServiceRegistry().getDevices()) {
 			restTemplate.getForObject(new StringBuilder("http://").append(device.getHost()).append(":")
 					.append(device.getPort()).append("/device/setup").toString(), String.class);
 		}
+		
+	}
+	
+	@Override
+	public void setupGateway() {
+		
+//		HttpHeaders headers = new HttpHeaders();
+//		
+//		headers.add("device-host", getServiceRegistry().getDevices().get(0).getHost());
+//		headers.add("device-port", getServiceRegistry().getDevices().get(0).getPort());
+//		
+//		HttpEntity<HttpHeaders> httpEntity = new HttpEntity<>(headers);
+//		
+//		restTemplate.exchange(
+//				new StringBuilder("http://").append(getServiceRegistry().getGateway().getHost()).append(":")
+//						.append(getServiceRegistry().getGateway().getPort()).append("/gateway/setup").toString(),
+//						HttpMethod.GET,
+//						httpEntity,
+//						Double.class);
+		
+		restTemplate.getForObject(
+				new StringBuilder("http://").append(getServiceRegistry().getGateway().getHost()).append(":")
+						.append(getServiceRegistry().getGateway().getPort()).append("/gateway/setup").toString(),
+				String.class);
+		
 	}
 
 }

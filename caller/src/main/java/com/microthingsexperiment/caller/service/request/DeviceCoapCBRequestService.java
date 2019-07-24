@@ -10,8 +10,8 @@ import com.microthingsexperiment.circuitbreaker.CircuitBreakerManager;
 import com.microthingsexperiment.circuitbreaker.ResponseWrapper;
 
 @Component
-@Profile("deviceCBRequest & http")
-public class DeviceCBRequestService implements RemoteRequestService {
+@Profile("deviceCBRequest & coap")
+public class DeviceCoapCBRequestService implements RemoteRequestService {
 
 	@Autowired
 	private CircuitBreakerManager<Double> cbService;
@@ -25,13 +25,16 @@ public class DeviceCBRequestService implements RemoteRequestService {
 
 		Double result = Double.NaN;
 
-		String baseUrl = new StringBuilder("http://").append(deviceHost).append(":").append(devicePort)
+		String baseUrl = new StringBuilder("coap://")
+				.append(deviceHost)
+				.append(":")
+				.append(devicePort)
 				.append("/device").toString();
 
 		try {
 			logger.info("Request Started: " + baseUrl);
 
-			 ResponseWrapper<Double> response = cbService.executeGetRequest(baseUrl, deviceId, Double.class);
+			ResponseWrapper<Double> response = cbService.executeGetRequest(baseUrl, deviceId, Double.class);
 			result = response.getResponse();
 			
 			logger.info("Request Returned: " + baseUrl);
