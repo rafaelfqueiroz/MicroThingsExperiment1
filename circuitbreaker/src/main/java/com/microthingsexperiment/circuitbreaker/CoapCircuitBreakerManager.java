@@ -3,6 +3,7 @@ package com.microthingsexperiment.circuitbreaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -16,12 +17,14 @@ public class CoapCircuitBreakerManager<T> implements CircuitBreakerManager<T> {
 	private CircuitBreakerProperties properties;
 	@Autowired
 	private AbstractFallbackStrategy<T> fallback;
+	@Value("${request.timeout}")
+	private long timeout;
 	
 	public Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Override
 	public ResponseWrapper<T> executeGetRequest(String url, String deviceId, Class<? extends T> clazz) {
-		ResponseWrapper<T> response = new CoapHystrixCommand<>(url, deviceId, fallback, properties, clazz).execute();
+		ResponseWrapper<T> response = new CoapHystrixCommand<>(url, deviceId, fallback, properties, clazz, timeout).execute();
 		
 		return response;
 	}
