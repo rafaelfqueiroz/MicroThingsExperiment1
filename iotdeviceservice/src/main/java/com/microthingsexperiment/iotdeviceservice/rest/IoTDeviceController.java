@@ -72,7 +72,7 @@ public class IoTDeviceController {
 		
 		logger.info("Starting IoTDevice.Setup:[]");
 		
-		setupManager.activate();		
+		setupManager.activate();
 		failureManager.isFailed();
 		dataReader.setup();
 		
