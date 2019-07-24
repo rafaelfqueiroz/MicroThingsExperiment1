@@ -14,9 +14,12 @@ import com.microthingsexperiment.circuitbreaker.fallback.AbstractFallbackStrateg
 
 public class CoapHystrixCommand<T> extends AbstractDeviceHystrixCommand<T>{
 	public Logger logger = LoggerFactory.getLogger(getClass());
+	
+	private long timeout;
 
-	public CoapHystrixCommand(String url, String deviceId, AbstractFallbackStrategy<T> fallback, CircuitBreakerProperties properties, Class<? extends T> clazzType) {
+	public CoapHystrixCommand(String url, String deviceId, AbstractFallbackStrategy<T> fallback, CircuitBreakerProperties properties, Class<? extends T> clazzType, long timeout) {
 		super(url, deviceId, fallback, properties, clazzType);
+		this.timeout = timeout;
 	}
 
 	@Override
@@ -24,11 +27,12 @@ public class CoapHystrixCommand<T> extends AbstractDeviceHystrixCommand<T>{
 		return executeGetRequest(getUrl(), getDeviceId());
 	}
 	
-	private ResponseWrapper<T> executeGetRequest(String url, String cacheKey) {
+	private ResponseWrapper<T> executeGetRequest(String url, String cacheKey) throws Exception {
 
 		logger.info("Starting:" + "CoapCB.executeGetRequest(" + url + ")");
 		
 		CoapClient client = new CoapClient(url);
+		client.setTimeout(timeout);
 		T response = null;
 		
 		try {
@@ -39,9 +43,11 @@ public class CoapHystrixCommand<T> extends AbstractDeviceHystrixCommand<T>{
 			getFallbackStrategy().updateDefaultValue(cacheKey, response);
 
 			logger.info("Returning:" + "CoapCB.executeGetRequest(" + url + "):" + response);
-
+		} catch (RuntimeException ex) {
+			throw ex;
 		} catch (ConnectorException | IOException e) {
 			e.printStackTrace();
+			throw e;
 		}
 		
 		return new ResponseWrapper<>(ResponseCode._UNKNOWN_SUCCESS_CODE.value, response);
